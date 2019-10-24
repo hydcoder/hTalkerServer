@@ -1,6 +1,6 @@
 package com.hyd.web.htalker.push.service;
 
-import com.hyd.web.htalker.push.bean.User;
+import com.hyd.web.htalker.push.bean.db.User;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

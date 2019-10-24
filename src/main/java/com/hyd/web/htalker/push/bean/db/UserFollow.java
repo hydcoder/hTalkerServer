@@ -2,6 +2,7 @@ package com.hyd.web.htalker.push.bean.db;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -61,7 +62,7 @@ public class UserFollow {
     private LocalDateTime createAt = LocalDateTime.now();
 
     // 定义为更新时间戳，在更新时就写入数据库
-    @CreationTimestamp
+    @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime updateAt = LocalDateTime.now();
 

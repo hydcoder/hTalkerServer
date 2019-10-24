@@ -1,11 +1,11 @@
 package com.hyd.web.htalker.push.bean.db;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -65,7 +65,7 @@ public class User {
     private LocalDateTime createAt = LocalDateTime.now();
 
     // 定义为更新时间戳，在更新时就写入数据库
-    @CreationTimestamp
+    @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime updateAt = LocalDateTime.now();
 
@@ -89,6 +89,18 @@ public class User {
     // 一对多，一个用户可以被很多人关注，每一次关注都是一条记录
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<UserFollow> followers = new HashSet<>();
+
+    // 我所有创建的群
+    // 对应的数据库表字段为TB_GROUP.ownerId
+    @JoinColumn(name = "ownerId")
+    // 懒加载集合方式为尽可能的不加载具体的数据
+    // 当访问groups.size()时仅仅查询数量，不加载具体的Group信息
+    // 只有当遍历集合的时候才加载具体的数据
+    @LazyCollection(LazyCollectionOption.EXTRA)
+    // 一对多，一个用户可以创建很多群
+    // FetchType.LAZY：懒加载，加载用户信息时不加载这个集合
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Group> groups = new HashSet<>();
 
     public String getId() {
         return id;
@@ -200,5 +212,13 @@ public class User {
 
     public void setFollowers(Set<UserFollow> followers) {
         this.followers = followers;
+    }
+
+    public Set<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<Group> groups) {
+        this.groups = groups;
     }
 }

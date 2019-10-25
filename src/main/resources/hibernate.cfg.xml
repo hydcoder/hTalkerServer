@@ -55,21 +55,22 @@
         validate: 启动时验证现有schema与你配置的hibernate是否一致，如果不一致就抛出异常，并不做更新
         -->
 
+        <mapping package="com.hyd.web.htalker.push.bean.db"
+                 class="com.hyd.web.htalker.push.bean.db.User"/>
+        <mapping package="com.hyd.web.htalker.push.bean.db"
+                 class="com.hyd.web.htalker.push.bean.db.UserFollow"/>
 
-        <!--<mapping package="net.qiujuer.web.italker.push.bean.db"-->
-        <!--class="net.qiujuer.web.italker.push.bean.db.Group"/>-->
-        <!--<mapping package="net.qiujuer.web.italker.push.bean.db"-->
-        <!--class="net.qiujuer.web.italker.push.bean.db.GroupMember"/>-->
-        <!--<mapping package="net.qiujuer.web.italker.push.bean.db"-->
-        <!--class="net.qiujuer.web.italker.push.bean.db.User"/>-->
-        <!--<mapping package="net.qiujuer.web.italker.push.bean.db"-->
-        <!--class="net.qiujuer.web.italker.push.bean.db.UserFollow"/>-->
-        <!--<mapping package="net.qiujuer.web.italker.push.bean.db"-->
-        <!--class="net.qiujuer.web.italker.push.bean.db.Message"/>-->
-        <!--<mapping package="net.qiujuer.web.italker.push.bean.db"-->
-        <!--class="net.qiujuer.web.italker.push.bean.db.PushHistory"/>-->
-        <!--<mapping package="net.qiujuer.web.italker.push.bean.db"-->
-        <!--class="net.qiujuer.web.italker.push.bean.db.Apply"/>-->
+        <mapping package="com.hyd.web.htalker.push.bean.db"
+                 class="com.hyd.web.htalker.push.bean.db.Group"/>
+        <mapping package="com.hyd.web.htalker.push.bean.db"
+                 class="com.hyd.web.htalker.push.bean.db.GroupMember"/>
+        <mapping package="com.hyd.web.htalker.push.bean.db"
+                 class="com.hyd.web.htalker.push.bean.db.Message"/>
+
+        <mapping package="com.hyd.web.htalker.push.bean.db"
+                 class="com.hyd.web.htalker.push.bean.db.PushHistory"/>
+        <mapping package="com.hyd.web.htalker.push.bean.db"
+                 class="com.hyd.web.htalker.push.bean.db.Apply"/>
 
     </session-factory>
 </hibernate-configuration>

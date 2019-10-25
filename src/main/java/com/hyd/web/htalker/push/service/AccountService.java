@@ -1,8 +1,11 @@
 package com.hyd.web.htalker.push.service;
 
-import com.hyd.web.htalker.push.bean.db.User;
+import com.hyd.web.htalker.push.bean.api.RegisterModel;
 
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -13,20 +16,15 @@ import javax.ws.rs.core.MediaType;
 @Path("/account")
 public class AccountService {
 
-    @GET
-    @Path("/login")
-    public String get() {
-        return "you get the login";
-    }
-
     @POST
-    @Path("/login")
+    @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public User post() {
-        User user = new User();
-        user.setName("美女");
+    public RegisterModel register(RegisterModel registerModel) {
+        return registerModel;
+        /*User user = new User();
+        user.setName(registerModel.getName());
         user.setSex(2);
-        return user;
+        return user;*/
     }
 }

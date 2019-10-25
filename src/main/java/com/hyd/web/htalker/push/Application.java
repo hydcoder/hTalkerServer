@@ -1,6 +1,6 @@
 package com.hyd.web.htalker.push;
 
-import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+import com.hyd.web.htalker.push.provider.GsonProvider;
 import com.hyd.web.htalker.push.service.AccountService;
 import org.glassfish.jersey.server.ResourceConfig;
 
@@ -17,7 +17,9 @@ public class Application extends ResourceConfig {
         packages(AccountService.class.getPackage().getName());
 
         // 注册json转换器
-        register(JacksonJsonProvider.class);
+//        register(JacksonJsonProvider.class);
+        // 替换为Gson解析器
+        register(GsonProvider.class);
 
         // 注册日志打印输出
         register(Logger.class);

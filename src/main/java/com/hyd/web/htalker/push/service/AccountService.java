@@ -114,7 +114,7 @@ public class AccountService extends BaseService {
         }
 
         // 拿到自己的个人信息
-        // User user = UserFactory.findByToken(token);
+//         User user = UserFactory.findByToken(token);
         User self = getSelf();
         return bind(self, pushId);
     }

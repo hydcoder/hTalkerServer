@@ -79,7 +79,7 @@ public class AuthRequestFilter implements ContainerRequestFilter {
         Response response = Response.status(Response.Status.OK)
                 .entity(model)
                 .build();
-        // 拦截，停止一个请求的继续下发，调用该方法后之间返回请求
+        // 拦截，停止一个请求的继续下发，调用该方法后直接返回请求
         // 不会走到Service中去
         requestContext.abortWith(response);
 

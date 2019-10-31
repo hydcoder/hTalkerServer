@@ -260,6 +260,7 @@ public class UserFactory {
             // 备注是我对别人的备注，他对我默认没有备注
             originFollow.setAlias(alias);
 
+            // 发起着是别人，我是被关注人的记录
             UserFollow targetFollow = new UserFollow();
             targetFollow.setOrigin(target);
             targetFollow.setTarget(origin);
@@ -282,7 +283,31 @@ public class UserFactory {
         return Hib.query(session -> (UserFollow) session.createQuery("from UserFollow where originId = :originId and targetId = :targetId")
              .setParameter("originId", origin.getId())
              .setParameter("targetId", target.getId())
+             .setMaxResults(1)
              // 查询一条数据
              .uniqueResult());
+    }
+
+    /**
+     * 搜索联系人的实现
+     * @param name 查询的名字，可以为空
+     * @return 搜索到的用户集合，如果name为空，则返回最近的用户
+     */
+    @SuppressWarnings("unchecked")
+    public static List<User> search(String name) {
+
+        if (Strings.isNullOrEmpty(name)) {
+            name = "";   // 保证不能为null的情况，减少后面的一些判断和额外的错误
+        }
+        final String searchName = "%" + name + "%";
+
+        return Hib.query(session -> {
+            // 查询的条件：name忽略大小写，并且使用like(模糊)查询；头像和描述必须完善才能被查询到
+           return (List<User>) session.createQuery("from User where lower(name) like :name and portrait is not null and description is not null ")
+                    .setParameter("name", searchName)
+                    .setMaxResults(20)
+                    .list();
+        });
+
     }
 }

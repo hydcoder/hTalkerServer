@@ -1,5 +1,6 @@
 package com.hyd.web.htalker.push.service;
 
+import com.google.common.base.Strings;
 import com.hyd.web.htalker.push.bean.api.base.ResponseModel;
 import com.hyd.web.htalker.push.bean.api.user.UpdateInfoModel;
 import com.hyd.web.htalker.push.bean.card.UserCard;
@@ -67,7 +68,7 @@ public class UserService extends BaseService {
     public ResponseModel<UserCard> follow(@PathParam("followId") String followId) {
         User self = getSelf();
 
-        if (followId.equalsIgnoreCase(self.getId())) {
+        if (Strings.isNullOrEmpty(followId) || followId.equalsIgnoreCase(self.getId())) {
             // 自己不能关注自己，返回参数异常
             return ResponseModel.buildParameterError();
         }
@@ -89,5 +90,64 @@ public class UserService extends BaseService {
         // TODO 通知我关注的人，我关注了他
 
         return ResponseModel.buildOk(new UserCard(followUser, true));
+    }
+
+    // 获取某个用户的信息
+    @GET
+    @Path("{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public ResponseModel<UserCard> getUser(@PathParam("id") String id) {
+        if (Strings.isNullOrEmpty(id)) {
+            // 返回参数异常
+            return ResponseModel.buildParameterError();
+        }
+
+        User self = getSelf();
+        if (self.getId().equalsIgnoreCase(id)) {
+            // 返回自己，不必查询数据库
+            return ResponseModel.buildOk(new UserCard(self, true));
+        }
+
+        User user = UserFactory.findById(id);
+        if (user == null) {
+            // 没有找到该用户
+            return ResponseModel.buildNotFoundUserError(null);
+        }
+
+        boolean isFollow = UserFactory.getUserFollow(self, user) != null;
+        return ResponseModel.buildOk(new UserCard(user, isFollow));
+    }
+
+    // 搜索人的接口实现
+    // 为了简化分页，只返回20条数据
+    @GET    // 搜索人，不涉及数据更改，只是查询，则为GET
+    @Path("/search/{name:(.*)?}")  // 名字为任意字符，可以为空
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public ResponseModel<List<UserCard>> search(@DefaultValue("") @PathParam("name") String name) {
+        User self = getSelf();
+
+        // 先查询数据
+        List<User> searchUsers = UserFactory.search(name);
+        // 把查询的人封装为UserCard
+        // 判断这些人中是否已经有我关注的人
+        // 如果有，则返回的关注状态中应该已经设置好状态
+
+        // 查询到我的联系人列表
+        List<User> contacts = UserFactory.contacts(self);
+
+        // 把 List<User> -> List<UserCard>
+        List<UserCard> userCards = searchUsers.stream()
+                .map(user -> {
+                    // 判断这个人是否是我自己或者是我的联系人中的人
+                    boolean isFollow = user.getId().equalsIgnoreCase(self.getId())
+                            // 进行联系人的任意匹配，匹配其中的id字段
+                            || contacts.stream().anyMatch(
+                                    contactUser -> contactUser.getId().equalsIgnoreCase(user.getId()));
+                            return new UserCard(user, isFollow);
+                }).collect(Collectors.toList());
+
+        return ResponseModel.buildOk(userCards);
     }
 }

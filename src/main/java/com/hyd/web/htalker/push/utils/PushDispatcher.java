@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 
 /**
  * Description: 消息推送工具类
- * Created by Administrator on 2019/11/13 10:50
+ * Created by hydCoder on 2019/11/13 10:50
  */
 public class PushDispatcher {
 

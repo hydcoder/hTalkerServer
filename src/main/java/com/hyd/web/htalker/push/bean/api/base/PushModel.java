@@ -63,5 +63,14 @@ public class PushModel {
         // 消息生成时间
         @Expose
         public LocalDateTime createAt = LocalDateTime.now();
+
+        @Override
+        public String toString() {
+            return "Entity{" +
+                    "type=" + type +
+                    ", content='" + content + '\'' +
+                    ", createAt=" + createAt +
+                    '}';
+        }
     }
 }

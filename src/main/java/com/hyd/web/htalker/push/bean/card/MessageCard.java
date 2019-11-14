@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 /**
  * Description: 消息的卡片Model
- * Created by Administrator on 2019/11/7 11:35
+ * Created by hydCoder on 2019/11/7 11:35
  */
 public class MessageCard {
     @Expose

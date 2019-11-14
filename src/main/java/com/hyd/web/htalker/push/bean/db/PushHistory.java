@@ -51,6 +51,11 @@ public class PushHistory {
     @Column()
     private LocalDateTime arrivalAt;
 
+    // 接收者当前状态下的设备推送ID
+    // User.pushId 可为null
+    @Column
+    private String receiverPushId;
+
     // 发送者，可为空, 可能是系统消息
     // 一个发送者可以发送很多推送消息
     @JoinColumn(name = "senderId")
@@ -150,5 +155,13 @@ public class PushHistory {
 
     public void setReceiverId(String receiverId) {
         this.receiverId = receiverId;
+    }
+
+    public String getReceiverPushId() {
+        return receiverPushId;
+    }
+
+    public void setReceiverPushId(String receiverPushId) {
+        this.receiverPushId = receiverPushId;
     }
 }

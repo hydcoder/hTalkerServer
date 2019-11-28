@@ -100,7 +100,8 @@ public class UserFactory {
             // 那么需要单点登录，让之前的设备退出账户，
             // 给之前的设备推送一条退出消息
             if (Strings.isNullOrEmpty(user.getPushId())) {
-                // TODO 推送一个退出消息
+                // 推送一个退出消息
+                PushFactory.pushLogout(user, user.getPushId());
             }
 
             // 更新新的设备Id
@@ -289,9 +290,9 @@ public class UserFactory {
     }
 
     /**
-     * 搜索联系人的实现
+     * 搜索群的实现
      * @param name 查询的名字，可以为空
-     * @return 搜索到的用户集合，如果name为空，则返回最近的用户
+     * @return 搜索到的群集合，如果name为空，则返回最近的群
      */
     @SuppressWarnings("unchecked")
     public static List<User> search(String name) {

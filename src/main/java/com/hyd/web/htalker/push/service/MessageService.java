@@ -3,8 +3,10 @@ package com.hyd.web.htalker.push.service;
 import com.hyd.web.htalker.push.bean.api.base.ResponseModel;
 import com.hyd.web.htalker.push.bean.api.message.MessageCreateModel;
 import com.hyd.web.htalker.push.bean.card.MessageCard;
+import com.hyd.web.htalker.push.bean.db.Group;
 import com.hyd.web.htalker.push.bean.db.Message;
 import com.hyd.web.htalker.push.bean.db.User;
+import com.hyd.web.htalker.push.factory.GroupFactory;
 import com.hyd.web.htalker.push.factory.MessageFactory;
 import com.hyd.web.htalker.push.factory.PushFactory;
 import com.hyd.web.htalker.push.factory.UserFactory;
@@ -48,8 +50,18 @@ public class MessageService extends BaseService {
 
     // 发送群聊消息
     private ResponseModel<MessageCard> pushToGroup(User sender, MessageCreateModel model) {
-        // TODO
-        return null;
+        // 找群是有权限性质的找
+        Group group = GroupFactory.findById(sender, model.getReceiverId());
+        if (group == null) {
+            // 没有找到接收者群，有可能是你不是群的成员
+            return ResponseModel.buildNotFoundUserError("Can't find receiver group");
+        }
+
+        // 添加到数据库
+        Message message = MessageFactory.add(sender, group, model);
+
+        // 走通用的推送逻辑
+        return buildAndPushResponse(sender, message);
     }
 
     // 发送单聊消息

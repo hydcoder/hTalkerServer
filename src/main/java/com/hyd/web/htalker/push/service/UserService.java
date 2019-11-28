@@ -5,6 +5,7 @@ import com.hyd.web.htalker.push.bean.api.base.ResponseModel;
 import com.hyd.web.htalker.push.bean.api.user.UpdateInfoModel;
 import com.hyd.web.htalker.push.bean.card.UserCard;
 import com.hyd.web.htalker.push.bean.db.User;
+import com.hyd.web.htalker.push.factory.PushFactory;
 import com.hyd.web.htalker.push.factory.UserFactory;
 
 import javax.ws.rs.*;
@@ -87,7 +88,9 @@ public class UserService extends BaseService {
             return ResponseModel.buildServiceError();
         }
 
-        // TODO 通知我关注的人，我关注了他
+        // 通知我关注的人，我关注了他
+        // 给他发送一个我的信息过去
+        PushFactory.pushFollow(followUser, new UserCard(self));
 
         return ResponseModel.buildOk(new UserCard(followUser, true));
     }

@@ -279,4 +279,27 @@ public class PushFactory {
         dispatcher.add(receiver, pushModel);
         dispatcher.submit();
     }
+
+    /**
+     * 推送朋友圈消息
+     * @param receiver 接受者
+     */
+    public static void pushFriendCircle(User receiver) {
+
+        PushHistory history = new PushHistory();
+        history.setEntityType(PushModel.ENTITY_TYPE_FRIEND_CIRCLE);
+        history.setEntity("你有一条新消息");
+        history.setReceiver(receiver);
+        //当前接受者的设备id
+        history.setReceiverPushId(receiver.getPushId());
+        Hib.queryOnly(session -> session.save(history));
+        //发送者
+        PushDispatcher dispatcher = new PushDispatcher();
+        //具体推送的内容
+        PushModel model = new PushModel()
+                .add(history.getEntityType(), history.getEntity());
+        dispatcher.add(receiver,model);
+        //发送者
+        dispatcher.submit();
+    }
 }
